@@ -7,4 +7,5 @@ sed -i 's/terraform-state-0we4u7bn/'${S3_BUCKET}'/' backend.tf
 sed -i 's/#//g' backend.tf
 aws s3 cp s3://${S3_BUCKET}/amivar.tf amivar.tf --region $AWS_REGION
 terraform init
+# because count=1, this time around, aws_instance.app-instance will be called
 terraform apply -auto-approve -var APP_INSTANCE_COUNT=1 -target aws_instance.app-instance
