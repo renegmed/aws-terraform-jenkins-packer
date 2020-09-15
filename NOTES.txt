@@ -1,0 +1,27 @@
+Status: WIP
+
+Steps:
+
+1.  $ terraform init 
+
+2.  $ make keys
+
+3.  $ make apply 
+
+This created jenkins machine (Jenkins-Server) but not yet the apps machine.
+
+$ ssh -i mykey ubuntu@3.238.18.126
+
+# sudo -s 
+
+# ps aux | grep jenkins 
+
+# cat /var/log/cloud-init-output.log
+
+# cat /var/log/jenkins/jenkins.log
+
+Open Jenkins browser ( refer to resource "aws_security_group" "jenkins-securitygroup")
+
+http://3.238.18.126:8080
+
+# cat /var/lib/jenkins/secrets/initialAdminPassword
