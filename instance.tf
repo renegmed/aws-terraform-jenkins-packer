@@ -1,3 +1,5 @@
+# NOTE: there two instances, jenkins and app
+
 data "aws_ami" "ubuntu" {
   most_recent = true
 
@@ -28,7 +30,8 @@ resource "aws_instance" "jenkins-instance" {
   key_name = aws_key_pair.mykeypair.key_name
 
   # user data
-  user_data = data.template_cloudinit_config.cloudinit-jenkins.rendered
+  user_data = data.template_cloudinit_config.cloudinit-jenkins.rendered  
+  # this will call scripts/jenkins-init.sh script on /dev/xvdh and set codes to /var/lib/jenkins
 
   # iam instance profile
   iam_instance_profile = aws_iam_instance_profile.jenkins-role.name

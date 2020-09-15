@@ -1,6 +1,6 @@
 Status: WIP
 
-Steps:
+Setting up Jenkins using terraform
 
 1.  $ terraform init 
 
@@ -8,9 +8,12 @@ Steps:
 
 3.  $ make apply 
 
-This created jenkins machine (Jenkins-Server) but not yet the apps machine.
+This created jenkins machine (Jenkins-Server) but not yet 
+the apps machine ("aws_instance" "app-instance"  count=0).
 
 $ ssh -i mykey ubuntu@3.238.18.126
+
+# ls -als /var/lib/jenkins
 
 # sudo -s 
 
@@ -20,8 +23,47 @@ $ ssh -i mykey ubuntu@3.238.18.126
 
 # cat /var/log/jenkins/jenkins.log
 
+
+
 Open Jenkins browser ( refer to resource "aws_security_group" "jenkins-securitygroup")
 
 http://3.238.18.126:8080
 
 # cat /var/lib/jenkins/secrets/initialAdminPassword
+
+
+Running terraform for apps within Jenkins
+
+Create new job - packer-build (freestyle) that builds ebs/ami image (packer-demo.json) using packer
+
+Git repo: https://github.com/renegmed/packer-demo 
+
+Build -> execute shell -> command: ./jenkins-terraform.sh 
+
+Result:
+
+/var/lib/jenkins/workspace/packer-build# cat amivar.tf 
+variable "APP_INSTANCE_AMI" { default = "ami-0ecb8dbf2ed485606" }
+
+
+
+$ terraform output
+
+Create new item - terraform apply (freestyle)
+
+Git repo: https://github.com/renegmed/aws-terraform-jenkins-packer
+
+Get newly created s3 bucket name and update backend.tf file (uncomment lines).
+Also, update scripts/jenkins-run-terraform.sh file  
+
+$  terraform init 
+
+
+Build -> Execute shell -> command: ./jenkins-packer-demo/scripts/jenkins-run-terraform.sh 
+
+$ ssh -i mykey ubuntu@3.238.18.126
+
+# ps aux | grep node
+
+# curl localhost
+# curl 3.238.18.126
